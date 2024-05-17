@@ -12,7 +12,7 @@ mongoose.connect("mongodb://localhost:27017/artventuretn")
         console.log(e);
     });
 
-
+//aaa
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
