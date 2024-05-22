@@ -2,31 +2,31 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
-import articleRoutes from './Routes/article.js'
+import blogRoutes from './Routes/blog.js'; 
+import commentaireRoutes from './Routes/commentaire.js';
+
 const app = express();
+const PORT = process.env.PORT || 9090;
+const hostname = "127.0.0.1";
+
 mongoose.connect("mongodb://localhost:27017/artventuretn")
     .then(() => {
-        console.log("database connected");
+        console.log("Database connected");
     })
     .catch((e) => {
         console.log(e);
     });
 
-//aaa
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 app.use(express.static("public"));
 
-
-const PORT = process.env.PORT || 9090;
-const hostname = "127.0.0.1";
-app.use('/article', articleRoutes);
-
+// Use blog routes
+app.use('/blog', blogRoutes);
+app.use('/commentaire', commentaireRoutes);
 
 app.listen(PORT, hostname, () => {
-    console.log(`server running on http://${hostname}:${PORT}`);
-})
-
-
+    console.log(`Server running on http://${hostname}:${PORT}`);
+});

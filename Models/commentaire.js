@@ -1,28 +1,25 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
-const {Schema,model} = mongoose
+const { Schema, model } = mongoose;
 
-const articleSchema = new Schema({
-    namearti : {
-        type : String,
-        required : true
+const commentaireSchema = new Schema({
+    content: {
+        type: String,
+        required: true
     },
-    
-    desc : {
-        type : String,
-        required : true
+    author: {
+        type: String,
+        required: true
     },
-    prix : {
-        type : Number,
-        required : true
+    createdAt: {
+        type: Date,
+        default: Date.now
     },
-    picturearti : {
-        type : String,
-        required : true
-    },
-    Quantite : {
-        type : Number,
-        required : true
+    blogId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Blog',
+        required: true
     }
-})
-export default model('article', articleSchema)
+});
+
+export default model('Commentaire', commentaireSchema);
