@@ -5,12 +5,26 @@ import User from '../Models/user.js';
 
 // Créer un nouvel utilisateur
 export const createUser = async (req, res) => {
+    const { nomuser, prenomuser, ageuser, phoneuser, sexeuser, mailuser, passworduser, addresseuser } = req.body;
+
+    // Valider les champs (ajoutez d'autres validations selon vos besoins)
+    if (!nomuser || !prenomuser || !ageuser || !phoneuser || !sexeuser || !mailuser || !passworduser || !addresseuser) {
+        return res.status(400).json({ message: 'Tous les champs sont requis' });
+    }
+    if (typeof ageuser !== 'number') {
+        return res.status(400).json({ message: 'L\'âge doit être un nombre' });
+    }
+    if (phoneuser.toString().length !== 8) {
+        return res.status(400).json({ message: 'Le numéro de téléphone doit comporter 8 chiffres' });
+    }
+    // Ajoutez d'autres validations selon vos besoins...
+
     try {
-        const newUser = new User(req.body);
+        const newUser = new User({ nomuser, prenomuser, ageuser, phoneuser, sexeuser, mailuser, passworduser, addresseuser });
         const savedUser = await newUser.save();
         res.status(201).json(savedUser);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
