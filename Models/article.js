@@ -1,14 +1,36 @@
-import express from 'express'
-import { body } from 'express-validator'
-import {addOne} from '../Controllers/article.js'
-const router = express.Router()
-router
-    .route('/')
-    .post(
-        body('namearti').isLength({ min : 5, max : 20}),
-        body('desc').isLength({ min : 20}),
-        body('prix'),
-        body('picturearti'), 
-        body('Quantite'),
-        addOne)   
-export default router
+import mongoose from 'mongoose';
+
+const { Schema, model } = mongoose;
+
+const articleSchema = new Schema({
+    namearti: {
+        type: String,
+        required: true,
+    },
+    desc: {
+        type: String,
+        required: true,
+    },
+    prix: {
+        type: Number,
+        required: true,
+    },
+    picturearti: {
+        type: String,
+        required: true,
+    },
+    Quantite: {
+        type: Number,
+        required: true,
+    },
+    category: {
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
+        required: true,
+    },
+    dateAdded: {
+        type: Date,
+        default: Date.now,
+    }
+});
+export default model('article', articleSchema);
