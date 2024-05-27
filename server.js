@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import articleRoutes from './Routes/article.js';
 import panierRoutes from './Routes/panier.js';
 import commandeRoutes from './Routes/commande.js';
+import userRoutes from './Routes/userRoutes.js';
 
 const app = express();
 
@@ -28,6 +29,8 @@ app.use(express.static("public"));
 app.use('/article', articleRoutes);
 app.use('/panier', panierRoutes);
 app.use('/commande', commandeRoutes); // Add this line
+app.use('/article', articleRoutes);
+app.use('/user', userRoutes);
 
 // Start server
 const PORT = process.env.PORT || 9090;
