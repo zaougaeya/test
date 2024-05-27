@@ -2,11 +2,11 @@
 
 import Panier from '../Models/panier.js';
 import Article from '../Models/article.js';
-
-// Create a new panier
 export const createPanier = async (req, res) => {
     const { userId, items } = req.body;
     try {
+        console.log("Request body:", req.body);
+
         // Fetch the prices of the articles
         const itemsWithPrices = await Promise.all(items.map(async item => {
             const article = await Article.findById(item.productId);
@@ -14,17 +14,24 @@ export const createPanier = async (req, res) => {
             return { ...item, prix: article.prix }; // Add the price to the item
         }));
 
+        console.log("Items with prices:", itemsWithPrices);
+
         // Calculate the total price
         const totalPrice = itemsWithPrices.reduce((acc, item) => acc + (item.quantity * item.prix), 0);
+
+        console.log("Total price:", totalPrice);
 
         // Create the panier with items including prices
         const newPanier = new Panier({ userId, items: itemsWithPrices, totalPrice });
         await newPanier.save();
 
+        console.log("New panier saved:", newPanier);
+
         // Return the newly created panier with total price
         res.status(201).send({ ...newPanier.toObject(), totalPrice });
     } catch (error) {
-        res.status(400).send(error);
+        console.error("Error creating panier:", error);
+        res.status(400).send(error.message);  // Send the error message as a response
     }
 };
 
