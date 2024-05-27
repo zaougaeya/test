@@ -3,40 +3,34 @@ import mongoose from "mongoose"
 const {Schema,model} = mongoose
 
 const userSchema = new Schema({
-    nomuser : {
+    name : {
         type : String,
         required : true
     },
-    prenomuser : {
+    lastname : {
         type : String,
         required : true
     },
-    ageuser : {
+    email : {
+        type : String,
+        required : true
+    },
+    password : {
+        type : String,
+        required : true
+    },
+    phone : {
         type : Number,
         required : true
     },
-    phoneuser : {
-        type : Number,
-        required : true
-    },
-    sexeuser : {
+    adress : {
         type : String,
         required : true
     },
-    mailuser : {
-        type : String,
-        required : true
-    },
-    passworduser : {
-        type : String,
-        required : true
-    },
-    addresseuser : {
-        type : String,
-        required : true
-    },
-    
 
-
+    gender : {
+        type : String,
+        required : true
+    },
 })
 export default model('user', userSchema)
