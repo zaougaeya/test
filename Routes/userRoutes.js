@@ -1,24 +1,43 @@
-// userRoutes.js
-import { body, validationResult } from 'express-validator';
+import { body } from 'express-validator';
 import express from 'express';
-import { createUser, getUsers, getUserById, updateUser, deleteUser } from '../Controllers/UserController.js';
+import { createUser, getUsers, getUserById, updateUser, deleteUser, register } from '../Controllers/UserController.js';
 
 const router = express.Router();
 
-// Routes CRUD pour les utilisateurs
- 
- 
-router.post('/', [
-    // Validation des champs
+// Route d'inscription
+router.post('/register', [
     body('nomuser').isLength({ min: 1 }).withMessage('Le nom est requis'),
     body('prenomuser').isLength({ min: 1 }).withMessage('Le prénom est requis'),
     body('ageuser').isNumeric().withMessage('L\'âge doit être un nombre'),
-    // Ajoutez d'autres validations pour les autres champs...
-], userController.createUser);
+    body('phoneuser').isLength({ min: 8, max: 8 }).withMessage('Le numéro de téléphone doit comporter 8 chiffres'),
+    body('sexeuser').isIn(['male', 'femelle', 'autre']).withMessage('Le sexe doit être male, femelle ou autre'),
+    body('mailuser').isEmail().withMessage('L\'email doit être valide'),
+    body('passworduser').isLength({ min: 6 }).withMessage('Le mot de passe doit comporter au moins 6 caractères'),
+    body('addresseuser').isLength({ min: 1 }).withMessage('L\'adresse est requise')
+], register);
 
-router.get('/', getUsers); // Récupérer tous les utilisateurs
-router.get('/:id', getUserById); // Récupérer un utilisateur par son ID
-router.put('/:id', updateUser); // Mettre à jour un utilisateur
-router.delete('/:id', deleteUser); // Supprimer un utilisateur
+// Route pour créer un utilisateur
+
+
+// Route pour obtenir tous les utilisateurs
+router.get('/', getUsers);
+
+// Route pour obtenir un utilisateur par ID
+router.get('/:id', getUserById);
+
+// Route pour mettre à jour un utilisateur
+router.put('/:id', [
+    body('nomuser').isLength({ min: 1 }).withMessage('Le nom est requis'),
+    body('prenomuser').isLength({ min: 1 }).withMessage('Le prénom est requis'),
+    body('ageuser').isNumeric().withMessage('L\'âge doit être un nombre'),
+    body('phoneuser').isLength({ min: 8, max: 8 }).withMessage('Le numéro de téléphone doit comporter 8 chiffres'),
+    body('sexeuser').isIn(['male', 'femelle', 'autre']).withMessage('Le sexe doit être male, femelle ou autre'),
+    body('mailuser').isEmail().withMessage('L\'email doit être valide'),
+    body('passworduser').isLength({ min: 6 }).withMessage('Le mot de passe doit comporter au moins 6 caractères'),
+    body('addresseuser').isLength({ min: 1 }).withMessage('L\'adresse est requise')
+], updateUser);
+
+// Route pour supprimer un utilisateur
+router.delete('/:id', deleteUser);
 
 export default router;

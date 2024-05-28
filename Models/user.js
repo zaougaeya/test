@@ -21,7 +21,8 @@ const userSchema = new Schema({
     },
     sexeuser : {
         type : String,
-        required : true
+        required : true,
+        enum: ['male', 'femelle', 'autre']
     },
     mailuser : {
         type : String,
