@@ -1,5 +1,42 @@
-// Controllers/commandeController.js
+// Controllers/commandeController.js 
 import Commande from '../Models/commande.js';
+import Panier from '../Models/panier.js';
+import { generateOrderPDF } from '../utils/pdfGenerator.js';
+
+export const pdfcreate = async (req, res) => {
+    const { userId, panierId } = req.body;
+    console.log('Received request to create PDF with:', { userId, panierId });
+
+    try {
+        if (!userId || !panierId) {
+            console.error('User ID and Panier ID are required');
+            return res.status(400).send({ message: 'User ID and Panier ID are required' });
+        }
+
+        const panier = await Panier.findById(panierId);
+        if (!panier) {
+            console.error('Panier not found with ID:', panierId);
+            return res.status(404).send({ message: 'Panier not found' });
+        }
+
+        const newCommande = new Commande({ userId, panierId, orderTotal: panier.totalPrice });
+        await newCommande.save();
+        console.log('New commande created:', newCommande);
+
+        const order = {
+            ...newCommande.toObject(),
+            items: panier.items // Add items to the order object
+        };
+
+        const pdfPath = generateOrderPDF(order);
+        console.log('PDF generated at path:', pdfPath);
+
+        res.status(201).send({ ...newCommande.toObject(), pdfPath });
+    } catch (error) {
+        console.error('Error creating commande:', error);
+        res.status(400).send({ message: 'Error creating commande', error });
+    }
+};
 
 // Create a new Commande
 export const createCommande = async (req, res) => {

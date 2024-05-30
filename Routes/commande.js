@@ -1,6 +1,5 @@
-// Routes/commandeRouter.js
 import express from 'express';
-import { createCommande, getAllCommandes, getCommandeById, updateCommande, deleteCommande } from '../Controllers/commandeController.js';
+import { createCommande, getAllCommandes, getCommandeById, updateCommande, deleteCommande, pdfcreate } from '../Controllers/commandeController.js';
 
 const router = express.Router();
 
@@ -18,5 +17,8 @@ router.put('/:id', updateCommande);
 
 // Delete a commande by ID
 router.delete('/:id', deleteCommande);
+
+// Generate and save a PDF for a commande
+router.post('/pdf', pdfcreate);
 
 export default router;
