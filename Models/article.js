@@ -31,6 +31,17 @@ const articleSchema = new Schema({
     dateAdded: {
         type: Date,
         default: Date.now,
-    }
+    },
+    discount: {
+        type: Number,
+        default: 0, 
+    },
+    prixApresRemise: {
+        type: Number,
+    },
+    comments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Comment',
+    }],
 });
 export default model('article', articleSchema);
