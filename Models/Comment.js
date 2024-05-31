@@ -10,12 +10,7 @@ const commentSchema = new Schema({
     article: {
         type: Schema.Types.ObjectId,
         ref: 'Article',
-        required: true,
-    },
-    produit: {
-        type: Schema.Types.ObjectId,
-        ref: 'Produit',
-        required: true,
+        required: false,
     },
     content: {
         type: String,
