@@ -1,10 +1,13 @@
 import { body } from 'express-validator';
 import express from 'express';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
 //import { getUsers, getUserById, updateUser, deleteUser, register, login } from '../Controllers/UserController.js';
 //import { forgotPassword, resetPassword } from '../Controllers/UserController.js'; 
 import { getUsers, getUserById, updateUser, deleteUser, register, login, forgotPassword, resetPassword } from '../Controllers/UserController.js'; 
 
 const router = express.Router();
+dotenv.config(); // Load environment variables
 
 // Route d'inscription
 router.post('/register', [
@@ -55,5 +58,38 @@ router.post('/reset-password/:token', [
     body('passworduser').isLength({ min: 6 }).withMessage('Le mot de passe doit comporter au moins 6 caractères')
 ], resetPassword);
 
-export default router;
 
+
+
+const emailUser = "oumayma.boughanmi@esprit.tn";
+const emailPass = "oumaBOGH999@";
+const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: emailUser,
+        pass: emailPass,
+    },
+});
+router.post('/send-test-email', async (req, res) => {
+    const { to, subject, text } = req.body;
+
+    if (!to) {
+        return res.status(400).json({ message: 'Recipient email address is required' });
+    }
+
+    const mailOptions = {
+        from: emailUser,
+        to,
+        subject,
+        text,
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        res.status(200).json({ message: 'Email sent successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+export default router;

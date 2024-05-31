@@ -8,6 +8,14 @@ import dotenv from "dotenv"; // Ajouter cette ligne pour charger les variables d
 
 
  dotenv.config(); // Charger les variables d'environnement
+//console.log(process.env);
+
+ const emailUser = "oumayma.boughanmi@esprit.tn";
+ const emailPass = "oumaBOGH999@";
+
+ console.log(emailUser);
+
+
  const app = express();
  
 
@@ -38,5 +46,3 @@ app.use('/user', userRoutes);
 app.listen(PORT, hostname, () => {
     console.log(`server running on http://${hostname}:${PORT}`);
 })
-
-
