@@ -1,6 +1,6 @@
 import express from 'express'
 import { body, param } from 'express-validator';
-import { addOne,getAll,getByName, deleteById,updateById} from '../Controllers/produit.js';
+import { addOne,getAll,getByName, deleteById,updateById,getById} from '../Controllers/produit.js';
 const router = express.Router();
 
 router.post(
@@ -16,7 +16,7 @@ router.post(
 router.get('/', getAll);
 router.get('/:name', param('name').isMongoId().withMessage('Nom invalid'), getByName);
 router.delete('/:id', param('id').isMongoId().withMessage('ID invalide'), deleteById);
-
+router.get('/:id', getById);
 router.put(
     '/:id',
     param('id').isMongoId().withMessage('ID invalide'),

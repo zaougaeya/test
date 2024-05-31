@@ -32,6 +32,10 @@ const produitSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    comments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Comment',
+    }],
 });
 
 export default model('Produit', produitSchema);

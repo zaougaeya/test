@@ -12,6 +12,11 @@ const commentSchema = new Schema({
         ref: 'Article',
         required: true,
     },
+    produit: {
+        type: Schema.Types.ObjectId,
+        ref: 'Produit',
+        required: true,
+    },
     content: {
         type: String,
         required: true,
