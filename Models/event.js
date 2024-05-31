@@ -36,14 +36,29 @@ const eventSchema = new Schema(
       type: String,
       required: true,
     },
+<<<<<<< Updated upstream
     locataire: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User', // Assuming there is a User model for locataires
+=======
+    host: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User', // Utilisez 'User' car c'est le nom du modèle pour l'hôte
+      required: true
+    },
+    local: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Local', // Utilisez 'Local' car c'est le nom du modèle pour le local
+>>>>>>> Stashed changes
       required: true
     },
     participants: [{
       type: mongoose.Schema.Types.ObjectId,
+<<<<<<< Updated upstream
       ref: 'User' // Users who are participating
+=======
+      ref: 'User' // Utilisateurs qui participent
+>>>>>>> Stashed changes
     }]
   },
   {

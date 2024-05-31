@@ -18,12 +18,20 @@ const localSchema = new Schema(
     },
     locataire: {
       type: mongoose.Schema.Types.ObjectId,
+<<<<<<< Updated upstream
       ref: 'User', // Locataire who owns the local
+=======
+      ref: 'User', // Locataire qui possède le local
+>>>>>>> Stashed changes
       required: true
     },
     events: [{
       type: mongoose.Schema.Types.ObjectId,
+<<<<<<< Updated upstream
       ref: 'Event' // Events happening in this local
+=======
+      ref: 'Event' // Événements se déroulant dans ce local
+>>>>>>> Stashed changes
     }]
   },
   {
@@ -31,5 +39,9 @@ const localSchema = new Schema(
   }
 );
 
+<<<<<<< Updated upstream
 //export default model('Local', localSchema);
 export default model ('Local',localSchema);
+=======
+export default model('Local', localSchema);
+>>>>>>> Stashed changes
