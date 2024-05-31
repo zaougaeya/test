@@ -3,13 +3,14 @@ import morgan from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
 import articleRoutes from './Routes/article.js';
-import panierRoutes from './Routes/panier.js';
-import commandeRoutes from './Routes/commande.js';
 import userRoutes from './Routes/userRoutes.js';
+import dotenv from "dotenv"; // Ajouter cette ligne pour charger les variables d'environnement
 
-const app = express();
 
-// Connect to MongoDB
+ dotenv.config(); // Charger les variables d'environnement
+ const app = express();
+ 
+
 mongoose.connect("mongodb://localhost:27017/artventuretn")
     .then(() => {
         console.log("database connected");
@@ -18,24 +19,24 @@ mongoose.connect("mongodb://localhost:27017/artventuretn")
         console.log(e);
     });
 
-// Middleware
+
 app.use(cors());
-app.use(express.json());
+app.use(express.json());  
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 app.use(express.static("public"));
+ 
 
-// Routes
-app.use('/article', articleRoutes);
-app.use('/panier', panierRoutes);
-app.use('/commande', commandeRoutes); // Add this line
+
+
+const PORT = process.env.PORT || 9090;
+const hostname = "127.0.0.1";
 app.use('/article', articleRoutes);
 app.use('/user', userRoutes);
 
-// Start server
-const PORT = process.env.PORT || 9090;
-const hostname = "127.0.0.1";
 
 app.listen(PORT, hostname, () => {
     console.log(`server running on http://${hostname}:${PORT}`);
-});
+})
+
+

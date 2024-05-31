@@ -1,36 +1,28 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose"
 
-const { Schema, model } = mongoose;
+const {Schema,model} = mongoose
 
 const articleSchema = new Schema({
-    namearti: {
-        type: String,
-        required: true,
+    namearti : {
+        type : String,
+        required : true
     },
-    desc: {
-        type: String,
-        required: true,
+    
+    desc : {
+        type : String,
+        required : true
     },
-    prix: {
-        type: Number,
-        required: true,
+    prix : {
+        type : Number,
+        required : true
     },
-    picturearti: {
-        type: String,
-        required: true,
+    picturearti : {
+        type : String,
+        required : true
     },
-    Quantite: {
-        type: Number,
-        required: true,
-    },
-    category: {
-        type: Schema.Types.ObjectId,
-        ref: 'Category',
-        required: true,
-    },
-    dateAdded: {
-        type: Date,
-        default: Date.now,
+    Quantite : {
+        type : Number,
+        required : true
     }
-});
-export default model('article', articleSchema);
+})
+export default model('article', articleSchema)

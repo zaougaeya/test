@@ -1,8 +1,17 @@
 import { validationResult } from 'express-validator';
 import User from '../Models/user.js';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
 
- 
+dotenv.config(); // Charge les variables d'environnement
+
+const secret = process.env.JWT_SECRET ;
+const emailUser = process.env.EMAIL_USER;
+const emailPass = process.env.EMAIL_PASS;
+
+
 
 
 export const getUsers = async (req, res) => {
@@ -88,7 +97,7 @@ export const register = async (req, res) => {
         return res.status(400).json({ message: 'Le numéro de téléphone doit comporter 8 chiffres' });
     }
     if (!['male', 'femelle', 'autre'].includes(sexeuser)) {
-        return res.status(400).json({ message: 'Veuillez choisir : male, femelle ou autre' });
+        return res.status(400).json({ message: 'Veuillez choisir : male, femme ou autre' });
     }
 
     try {
@@ -119,5 +128,116 @@ export const register = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+
+// Méthode de login
+export const login = async (req, res) => {
+    const { mailuser, passworduser } = req.body;
+
+    // Valider les entrées
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        // Vérifier si l'utilisateur existe
+        const user = await User.findOne({ mailuser });
+        if (!user) {
+            return res.status(400).json({ message: 'Email ou mot de passe incorrect' });
+        }
+
+        // Comparer le mot de passe
+        const isMatch = await bcrypt.compare(passworduser, user.passworduser);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Email ou mot de passe incorrect' });
+        }
+
+        // Créer un token JWT
+        const token = jwt.sign({ id: user._id }, secret, { expiresIn: '1h' });
+
+          // Envoyer la réponse avec le message "login ok" seulement
+          res.status(200).json({ message: 'login ok' });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+};
+
+export const forgotPassword = async (req, res) => {
+    const { mailuser } = req.body;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const user = await User.findOne({ mailuser });
+        if (!user) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        }
+
+        const resetToken = jwt.sign({ id: user._id }, secret, { expiresIn: '1h' });
+
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: emailUser,
+                pass: emailPass,
+            },
+        });
+
+        const mailOptions = {
+            to: user.mailuser,
+            subject: 'Réinitialisation de mot de passe',
+            text: `Vous avez demandé la réinitialisation de votre mot de passe. Veuillez utiliser le lien suivant pour réinitialiser votre mot de passe : http://localhost:9090/reset-password/${resetToken}`,
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return res.status(500).json({ message: error.message });
+            }
+            res.status(200).json({ message: 'Email de réinitialisation envoyé' });
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const resetPassword = async (req, res) => {
+    const { token } = req.params;
+    const { passworduser } = req.body;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const decoded = jwt.verify(token, secret);
+        const user = await User.findById(decoded.id);
+        if (!user) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        }
+
+        const hashedPassword = await bcrypt.hash(passworduser, 10);
+
+        user.passworduser = hashedPassword;
+        await user.save();
+
+        res.status(200).json({ message: 'Mot de passe réinitialisé avec succès' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+        
+    
+
+
+
+
+
 
 
