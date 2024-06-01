@@ -1,17 +1,38 @@
+import { sendEmail } from './sendEmail.js'; // Importer directement depuis le répertoire racine
 import Blog from '../Models/blog.js';
+import User from '../Models/user.js';
 
-// Create a new blog post
+
+
+async function getAllUserEmails() {
+    try {
+        const users = await User.find({}, 'email'); // Fetch only email field
+        return users.map(user => user.email);
+    } catch (error) {
+        console.error('Error fetching user emails:', error);
+        return [];
+    }
+}
+
+// Create blog 
 export const createBlog = async (req, res) => {
     try {
         const newBlog = new Blog(req.body);
         const savedBlog = await newBlog.save();
+
+        // Fetch all user emails
+        const userEmails = await getAllUserEmails();
+
+        // Send email notification to all users
+        const emailContent = `A new blog post has been added: ${savedBlog.title}`;
+        await sendEmail(userEmails, 'New Blog Post Added', emailContent);
+
         res.status(201).json(savedBlog);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
-
-// Get all blog posts
+// Get all blogs
 export const getBlogs = async (req, res) => {
     try {
         const blogs = await Blog.find();
@@ -21,7 +42,7 @@ export const getBlogs = async (req, res) => {
     }
 };
 
-// Get a single blog post by ID
+// Get blog by ID
 export const getBlogById = async (req, res) => {
     try {
         const blog = await Blog.findById(req.params.id);
@@ -32,7 +53,7 @@ export const getBlogById = async (req, res) => {
     }
 };
 
-// Update a blog post by ID
+// Update blog by ID
 export const updateBlog = async (req, res) => {
     try {
         const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
@@ -43,7 +64,7 @@ export const updateBlog = async (req, res) => {
     }
 };
 
-// Delete a blog post by ID
+// Delete blog by ID
 export const deleteBlog = async (req, res) => {
     try {
         const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
