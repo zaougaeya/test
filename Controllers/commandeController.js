@@ -2,6 +2,11 @@
 import Commande from '../Models/commande.js';
 import Panier from '../Models/panier.js';
 import { generateOrderPDF } from '../utils/pdfGenerator.js';
+import mongoose, { mongo } from 'mongoose';
+
+
+
+
 
 export const pdfcreate = async (req, res) => {
     const { userId, panierId } = req.body;
@@ -108,4 +113,15 @@ export const deleteCommande = async (req, res) => {
     } catch (error) {
         res.status(500).send(error);
     }
-};
+    
+}; 
+ 
+// Get all commandes sorted by createdAt date
+export const getAllCommandesbyorder = async (req, res) => {
+    try {
+        const commandes = await Commande.find().sort({ createdAt: -1 }); // Sort by createdAt in descending order
+        res.status(200).send(commandes);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}; 
