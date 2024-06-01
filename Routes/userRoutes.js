@@ -21,11 +21,10 @@ router.post('/register', [
 ], register);
 
 // Route de login
-router.post('/register/login', [
+router.post('/login', [
     body('mailuser').isEmail().withMessage('L\'email doit être valide'),
     body('passworduser').isLength({ min: 6 }).withMessage('Le mot de passe doit comporter au moins 6 caractères')
 ], login);
-
 
 
 // Route pour obtenir tous les utilisateurs
