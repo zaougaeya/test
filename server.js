@@ -12,7 +12,8 @@ import dotenv from "dotenv"; // Ajouter cette ligne pour charger les variables d
 
  const emailUser = "oumayma.boughanmi@esprit.tn";
  const emailPass = "oumaBOGH999@";
-
+ const JWT_SECRET="mySuperSecretKey123!$%&*()";
+ 
  console.log(emailUser);
 
 

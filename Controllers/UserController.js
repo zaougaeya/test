@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 dotenv.config(); // Charge les variables d'environnement
 
 const secret = process.env.JWT_SECRET ;
+
 const emailUser = process.env.EMAIL_USER;
 const emailPass = process.env.EMAIL_PASS;
 
@@ -96,7 +97,7 @@ export const register = async (req, res) => {
     if (phoneuser.toString().length !== 8) {
         return res.status(400).json({ message: 'Le numéro de téléphone doit comporter 8 chiffres' });
     }
-    if (!['male', 'femelle', 'autre'].includes(sexeuser)) {
+    if (!['male', 'femme', 'autre'].includes(sexeuser)) {
         return res.status(400).json({ message: 'Veuillez choisir : male, femme ou autre' });
     }
 
@@ -131,7 +132,7 @@ export const register = async (req, res) => {
 
 
 // Méthode de login
-export const login = async (req, res) => {
+/*export const login = async (req, res) => {
     const { mailuser, passworduser } = req.body;
 
     // Valider les entrées
@@ -154,14 +155,48 @@ export const login = async (req, res) => {
         }
 
         // Créer un token JWT
-        const token = jwt.sign({ id: user._id }, secret, { expiresIn: '1h' });
+        //const token = jwt.sign({ id: user._id }, secret, { expiresIn: '1h' });
 
           // Envoyer la réponse avec le message "login ok" seulement
           res.status(200).json({ message: 'login ok' });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
+};*/
+
+// Login user
+export const login = async (req, res) => {
+    const { mailuser, passworduser } = req.body;
+
+    // Validate input
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        // Check if the user exists
+        const user = await User.findOne({ mailuser });
+        if (!user) {
+            return res.status(400).json({ message: 'Email ou mot de passe incorrect' });
+        }
+
+        // Compare the password
+        const isMatch = await bcrypt.compare(passworduser, user.passworduser);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Email ou mot de passe incorrect' });
+        }
+
+        // Create a JWT token
+        const token = jwt.sign({ id: user._id }, secret, { expiresIn: '1h' });
+
+        // Send the response with the message "login ok"
+        res.status(200).json({ message: 'login ok' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };
+
 
 export const forgotPassword = async (req, res) => {
     const { mailuser } = req.body;

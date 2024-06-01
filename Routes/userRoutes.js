@@ -2,9 +2,8 @@ import { body } from 'express-validator';
 import express from 'express';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
-//import { getUsers, getUserById, updateUser, deleteUser, register, login } from '../Controllers/UserController.js';
-//import { forgotPassword, resetPassword } from '../Controllers/UserController.js'; 
 import { getUsers, getUserById, updateUser, deleteUser, register, login, forgotPassword, resetPassword } from '../Controllers/UserController.js'; 
+//import { changePassword } from '../Controllers/UserController.js';
 
 const router = express.Router();
 dotenv.config(); // Load environment variables
@@ -15,7 +14,7 @@ router.post('/register', [
     body('prenomuser').isLength({ min: 1 }).withMessage('Le prénom est requis'),
     body('ageuser').isNumeric().withMessage('L\'âge doit être un nombre'),
     body('phoneuser').isLength({ min: 8, max: 8 }).withMessage('Le numéro de téléphone doit comporter 8 chiffres'),
-    body('sexeuser').isIn(['male', 'femme', 'autre']).withMessage('Le sexe doit être male, femelle ou autre'),
+    body('sexeuser').isIn(['male', 'femme', 'autre']).withMessage('Le sexe doit être male, femme ou autre'),
     body('mailuser').isEmail().withMessage('L\'email doit être valide'),
     body('passworduser').isLength({ min: 6 }).withMessage('Le mot de passe doit comporter au moins 6 caractères'),
     body('addresseuser').isLength({ min: 1 }).withMessage('L\'adresse est requise')
@@ -41,7 +40,7 @@ router.put('/:id', [
     body('prenomuser').isLength({ min: 1 }).withMessage('Le prénom est requis'),
     body('ageuser').isNumeric().withMessage('L\'âge doit être un nombre'),
     body('phoneuser').isLength({ min: 8, max: 8 }).withMessage('Le numéro de téléphone doit comporter 8 chiffres'),
-    body('sexeuser').isIn(['male', 'femme', 'autre']).withMessage('Le sexe doit être male, femelle ou autre'),
+    body('sexeuser').isIn(['male', 'femme', 'autre']).withMessage('Le sexe doit être male, femme ou autre'),
     body('mailuser').isEmail().withMessage('L\'email doit être valide'),
     body('passworduser').isLength({ min: 6 }).withMessage('Le mot de passe doit comporter au moins 6 caractères'),
     body('addresseuser').isLength({ min: 1 }).withMessage('L\'adresse est requise')
