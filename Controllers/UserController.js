@@ -130,42 +130,32 @@ export const register = async (req, res) => {
 };
  
  
- 
-export const login = async (req, res) => {
+ export const login = async (req, res) => {
     const { mailuser, passworduser } = req.body;
- 
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
- 
+
     try {
         const user = await User.findOne({ mailuser });
-        console.log('mailuser:', mailuser);
         if (!user) {
             return res.status(400).json({ message: 'Email ou mot de passe incorrect' });
         }
- 
+
         const isMatch = await bcrypt.compare(passworduser, user.passworduser);
-        console.log('passworduser:', passworduser);
-        console.log('user.passworduser:', user.passworduser);
-         console.log('Generated Token:', JWT_SECRET); // Add logging for the generated token
- 
         if (!isMatch) {
             return res.status(400).json({ message: 'Email ou mot de passe incorrect' });
         }
- 
-        console.log('JWT_SECRET:', JWT_SECRET); // Ensure this prints the correct secret key
- 
-        // Ensure secret key is correctly accessed
-       
-        res.status(200).json({ message: 'login ok', JWT_SECRET });
+
+         res.status(200).json({ message: 'login ok', id: user._id });
     } catch (error) {
-        console.error('Error during login:', error); // Add logging for the error
+        console.error('Error during login:', error);
         res.status(500).json({ message: error.message });
     }
 };
- 
+
  
  
  
