@@ -5,11 +5,11 @@ const router = express.Router();
 
 router.post(
     '/',
-    body('nameprod').isLength({ min: 5, max: 20 }).withMessage('Le nom doit contenir entre 5 et 20 caractères'),
-    body('desc').isLength({ min: 20 }).withMessage('La description doit contenir au moins 20 caractères'),
-    body('prix').isNumeric().withMessage('Le prix doit être un nombre'),
+    body('nameprod'),
+    body('desc'),
+    body('prix'),
     body('pictureprod').notEmpty().withMessage('L\'image est obligatoire'),
-    body('quantiteprod').isInt({ min: 0 }).withMessage('La quantité doit être un entier positif'),
+    body('quantiteprod'),
     body('categoryprod').isMongoId().withMessage('ID de catégorie invalide'),
     addOne
 );
@@ -19,11 +19,11 @@ router.delete('/:id', param('id').isMongoId().withMessage('ID invalide'), delete
 router.put(
     '/:id',
     param('id').isMongoId().withMessage('ID invalide'),
-    body('nameprod').isLength({ min: 5, max: 20 }).withMessage('Le nom doit contenir entre 5 et 20 caractères'),
-    body('desc').isLength({ min: 20 }).withMessage('La description doit contenir au moins 20 caractères'),
-    body('prix').isNumeric().withMessage('Le prix doit être un nombre'),
+    body('nameprod'),
+    body('desc'),
+    body('prix'),
     body('pictureprod').notEmpty().withMessage('L\'image est obligatoire'),
-    body('quantiteprod').isInt({ min: 0 }).withMessage('La quantité doit être un entier positif'),
+    body('quantiteprod'),
     body('categoryprod').isMongoId().withMessage('ID de catégorie invalide'),
         updateById
     );

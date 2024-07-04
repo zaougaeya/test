@@ -5,12 +5,12 @@ const { Schema, model } = mongoose;
 const categorieSchema = new Schema({
     namecat: {
         type: String,
-        required: true
+       // required: true
     },
     picturecat: {
         type: String,
-        required: true
+       // required: true
     }
 });
 
-export default model('categorie', categorieSchema);
+export default model('category', categorieSchema);

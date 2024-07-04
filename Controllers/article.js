@@ -2,28 +2,18 @@ import article from '../Models/article.js'
 import categorie from '../Models/categorie.js'
 import { validationResult } from 'express-validator';
 
-export async function addOne(req, res) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    try {
-        const category = await categorie.findById(req.body.category);
-        if (!category) {
-            return res.status(404).json({ message: 'Catégorie non trouvée' });
+    export async function addOne(req, res) {
+        try {
+          
+            console.log(req.body)
+            const newArticle = await article(req.body);
+            newArticle.save();
+            console.log("Nouvelle article créée avec succès :", newArticle);
+            res.status(201).json(newArticle);
+        } catch (err) {
+            res.status(500).json(err);
         }
-        if (req.body.discount) {
-            req.body.discountedPrice = req.body.prix - (req.body.prix * (req.body.discount / 100));
-        }
-        req.body.dateAdded = new Date();
-        const newArticle = await article.create(req.body);
-        
-        res.status(201).json(newArticle);
-    } catch (err) {
-        res.status(500).json({ message: 'Erreur lors de la création de l\'article', error: err });
     }
-}
 
 export function getAll(req, res) {
     article.find()
@@ -72,7 +62,7 @@ export function deleteById(req, res) {
 }
 
 export async function getByCategoryName(req, res) {
-    const categoryName = req.params.categoryName;
+    const categoryName = req.body.categoryName;
 
     try {
         const category = await categorie.findOne({ namecat: categoryName }); // Correction ici
@@ -83,7 +73,7 @@ export async function getByCategoryName(req, res) {
         const articles = await article.find({ category: category._id }).populate('category', 'namecat');
         res.status(200).json(articles);
     } catch (err) {
-        res.status(500).json({ message: 'Erreur lors de la recherche', error: err });
+        res.status(500).json({ message: 'Erreur lors de la recherche', error: err.mess });
     }
 }
 
