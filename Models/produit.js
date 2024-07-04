@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 
 const { Schema, model } = mongoose;
 
-const articleSchema = new Schema({
-    namearti: {
+const produitSchema = new Schema({
+    nameprod: {
         type: String,
         required: true,
     },
@@ -15,33 +15,24 @@ const articleSchema = new Schema({
         type: Number,
         required: true,
     },
-    picturearti: {
+    pictureprod: {
         type: String,
         required: true,
     },
-    Quantite: {
+    quantiteprod: {
         type: Number,
         required: true,
     },
-    category: {
+    categoryprod: {
         type: Schema.Types.ObjectId,
         ref: 'Category',
         required: true,
     },
-    dateAdded: {
+    dateAddedprod: {
         type: Date,
         default: Date.now,
     },
-    discount: {
-        type: Number,
-        default: 0, 
-    },
-    prixApresRemise: {
-        type: Number,
-    },
-    comments: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Comment',
-    }],
+    
 });
-export default model('article', articleSchema);
+
+export default model('Produit', produitSchema);

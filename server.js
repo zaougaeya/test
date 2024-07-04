@@ -3,9 +3,30 @@ import morgan from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
 import articleRoutes from './Routes/article.js';
-import panierRoutes from './Routes/panier.js';
-import commandeRoutes from './Routes/commande.js';
+import categorieRoutes from './Routes/categorie.js';
+import commentRoutes from './Routes/comment.js';
+import produitRoutes  from './Routes/produit.js';
+import eventRoutes from './Routes/event.js';
+import localRoutes from './Routes/local.js';
 import userRoutes from './Routes/userRoutes.js';
+import panierRoutes from './Routes/panier.js';
+import commandeRoutes from './Routes/commandeRouter.js';
+import blogRoutes from './Routes/blog.js'; 
+import commentaireRoutes from './Routes/commentaire.js';
+import dotenv from "dotenv";
+
+dotenv.config(); // Charger les variables d'environnement
+//console.log(process.env);
+
+ const emailUser = "oumayma.boughanmi@esprit.tn";
+ const emailPass = "oumaBOGH999@";
+
+ console.log(emailUser);
+ const JWT_SECRET="mySuperSecretKey123!$%&*()";
+
+
+
+
 
 const app = express();
 
@@ -26,14 +47,20 @@ app.use(morgan("dev"));
 app.use(express.static("public"));
 
 // Routes
-app.use('/article', articleRoutes);
 app.use('/panier', panierRoutes);
 app.use('/commande', commandeRoutes); // Add this line
-app.use('/article', articleRoutes);
 app.use('/user', userRoutes);
+app.use("/events", eventRoutes);
+app.use("/locals", localRoutes);
+app.use('/article', articleRoutes);
+app.use('/categorie', categorieRoutes);
+app.use('/comment',commentRoutes);
+app.use('/produit', produitRoutes);
+app.use('/blog', blogRoutes);
+app.use('/commentaire', commentaireRoutes);
 
 // Start server
-const PORT = process.env.PORT || 9090;
+const PORT = process.env.PORT || 3000;
 const hostname = "127.0.0.1";
 
 app.listen(PORT, hostname, () => {

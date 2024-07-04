@@ -1,7 +1,7 @@
 // Controllers/commandeController.js 
-import Commande from '../Models/commande.js';
+import Commande from '../Models/Commande.js';
 import Panier from '../Models/panier.js';
-import { generateOrderPDF } from '../utils/pdfGenerator.js';
+import { generateOrderPDF } from '../util/pdfGenerator.js';
 import mongoose, { mongo } from 'mongoose';
 
 
@@ -124,4 +124,16 @@ export const getAllCommandesbyorder = async (req, res) => {
     } catch (error) {
         res.status(500).send(error);
     }
-}; 
+};
+export const getCommandesByCreatedAtForUsers = async (req, res) => {
+    const { userIds } = req.query; // Assuming userIds is an array of user IDs
+    
+    try {
+        const commandes = await Commande.find({ userId: { $in: userIds } })
+                                         .sort({ createdAt: -1 }); // Sort by createdAt in descending order
+        res.status(200).send(commandes);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+};
+ 

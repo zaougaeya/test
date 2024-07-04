@@ -1,4 +1,7 @@
 // panierController.js
+import fs from 'fs';
+import path from 'path';  
+import QRCode from 'qrcode';
 
 import Panier from '../Models/panier.js';
 import Article from '../Models/article.js';
@@ -118,3 +121,34 @@ export const addItemToPanier = async (req, res) => {
         res.status(400).send(error); }
     
     }
+
+
+
+    const generateAndSaveQRCode = async (data, fileName) => {
+        try {
+            const qrCodeDataURL = await QRCode.toDataURL(JSON.stringify(data), { type: 'png' }); // Specify type as PNG
+            const qrCodeBuffer = Buffer.from(qrCodeDataURL.split(',')[1], 'base64');
+            const filePath = path.join('C:/test', fileName);
+            fs.writeFileSync(filePath, qrCodeBuffer);
+        } catch (error) {
+            throw new Error('Error generating and saving QR code');
+        }
+    };
+
+    
+    export const generateAndSaveQRCodeForPanier = async (req, res) => {
+        const { panierId } = req.params;
+        const fileName = `panier_${panierId}.png`; // Example file name
+        try {
+            const panier = await Panier.findById(panierId);
+            if (!panier) {
+                return res.status(404).send({ message: 'Panier not found' });
+            }
+            
+            await generateAndSaveQRCode(panier, fileName);
+    
+            res.status(200).send({ fileName });
+        } catch (error) {
+            res.status(500).send(error);
+        }
+    };

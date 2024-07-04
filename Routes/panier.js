@@ -1,7 +1,7 @@
 // routes/panier.js
 
 import express from 'express';
-import { createPanier, getPanier, updatePanier, deletePanier, addItemToPanier } from '../Controllers/panierController.js';
+import { createPanier, getPanier, updatePanier, deletePanier, addItemToPanier ,generateAndSaveQRCodeForPanier} from '../Controllers/panierController.js';
 
 const router = express.Router();
 
@@ -19,5 +19,9 @@ router.delete('/:userId', deletePanier);
 
 // Add item to Panier
 router.post('/:userId/add', addItemToPanier);
+ 
+// Generate and save QR code for a panier
+router.get('/qr/:panierId', generateAndSaveQRCodeForPanier);
+
 
 export default router;
