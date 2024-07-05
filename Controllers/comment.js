@@ -76,10 +76,11 @@ export const deleteComment = async (req, res) => {
 
         await Comment.findByIdAndDelete(req.params.commentId);
         await Article.findByIdAndUpdate(comment.article, { $pull: { comments: req.params.commentId } });
-
-        res.status(200).json({ message: 'Commentaire supprimé avec succès' });
+        res.status(200).json({ message: 'Commentaire supprimé avec succès' 
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
+
 

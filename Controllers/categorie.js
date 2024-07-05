@@ -2,18 +2,14 @@ import categorie from '../Models/categorie.js';
 import { validationResult } from 'express-validator';
 
 export async function addOne(req, res) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
+    
+  
 
     try {
-        const existingCategorie = await categorie.findOne({ namecat: req.body.namecat });
-        if (existingCategorie) {
-            return res.status(400).json({ errors: [{ msg: 'Le nom de la catégorie existe déjà' }] });
-        }
-
-        const newCategorie = await categorie.create(req.body);
+      
+        console.log(req.body)
+        const newCategorie = await categorie(req.body);
+        newCategorie.save();
         console.log("Nouvelle catégorie créée avec succès :", newCategorie);
         res.status(201).json(newCategorie);
     } catch (err) {
@@ -47,6 +43,20 @@ export function deleteById(req, res) {
         .catch(err => res.status(500).json(err));
 }
 
+export function getById(req, res) {
+    const categorieId = req.params.id;
+
+    categorie.findById(categorieId)
+        .then(categorie => {
+            if (!categorie) {
+                return res.status(404).json({ message: 'Catégorie non trouvée' });
+            }
+            res.status(200).json(categorie);
+        })
+        .catch(err => {
+            res.status(500).json(err);
+        });
+}
 
 export async function updateById(req, res) {
     const errors = validationResult(req);
@@ -69,5 +79,6 @@ export async function updateById(req, res) {
         res.status(500).json(err);
     }
 }
+
 
 

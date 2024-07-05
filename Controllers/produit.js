@@ -2,21 +2,17 @@ import produit from '../Models/produit.js';
 
 import { validationResult } from 'express-validator';
 
-export function addOne(req, res) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+export async function addOne(req, res) {
+      try {
+      console.log(req.body)
+        const newProduit= await produit(req.body);
+        newProduit.save();
+        console.log("Nouvelle produit créée avec succès :", newProduit);
+        res.status(201).json(newProduit);
+    } catch (err) {
+        res.status(500).json(err);
     }
-    produit.create(req.body)
-        .then(newProduit => {
-            console.log("Nouvel produit créé avec succès :", newProduit);
-            res.status(201).json(newProduit);
-        })
-        .catch(err => {
-            res.status(500).json(err);
-        });
 }
-
 export function getAll(req, res) {
     produit.find()
         .then(produits => res.status(200).json(produits))
@@ -57,3 +53,4 @@ export function updateById(req, res) {
         })
         .catch(err => res.status(500).json(err));
 }
+
